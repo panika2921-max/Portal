@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=390, initial-scale=1, user-scalable=no">
+    <title>Вход — Корочки.есть</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <div class="header__inner">
+                <a href="index.html" class="logo">
+                    <img src="images/a.png" alt="" class="logo__img">
+                    <span class="logo__text">Корочки.есть</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="auth-page">
+        <div class="container">
+            <div class="auth-card">
+                <div class="auth-card__header">
+                    <img src="images/logo.png" alt="" class="auth-card__logo">
+                    <h1 class="auth-card__title">Вход в систему</h1>
+                    <p class="auth-card__subtitle">Введите логин и пароль для входа</p>
+                </div>
+
+                <div class="auth-message auth-message--error" id="authMessage" style="display: none;">
+                    <span id="authMessageText"></span>
+                </div>
+
+                <form id="loginForm" novalidate>
+                    <div class="form-group">
+                        <label for="login" class="form-label">Логин</label>
+                        <input type="text" id="login" name="login" class="form-input"
+                               placeholder="Введите логин" required>
+                        <span class="form-error" id="loginError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Пароль</label>
+                        <input type="password" id="password" name="password" class="form-input"
+                               placeholder="Введите пароль" required>
+                        <span class="form-error" id="passwordError"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn--primary btn--full">Войти</button>
+                </form>
+
+                <div class="auth-card__footer">
+                    <a href="register.html" class="auth-link">Ещё не зарегистрированы? Регистрация</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/validation.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>
