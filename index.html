@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=390, initial-scale=1, user-scalable=no">
+    <title>Корочки.есть — Главная</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <div class="header__inner">
+                <a href="index.html" class="logo">
+                    <img src="images/a.png" alt="" class="logo__img">
+                    <span class="logo__text">Корочки.есть</span>
+                </a>
+                <nav class="nav">
+                    <a href="login.html" class="nav__link">Войти</a>
+                    <a href="register.html" class="nav__link nav__link--btn">Регистрация</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- Hero -->
+        <section class="hero">
+            <div class="container">
+                <h1 class="hero__title">
+                    Обучение, которое даёт <span class="text-accent">результат</span>
+                </h1>
+                <p class="hero__subtitle">
+                    Онлайн-курсы дополнительного профессионального образования с выдачей удостоверений
+                </p>
+                <a href="register.html" class="btn btn--primary">Начать обучение</a>
+            </div>
+        </section>
+
+        <!-- Слайдер -->
+        <section class="slider-section">
+            <div class="container">
+                <h2 class="section-title">Наши направления</h2>
+                <div class="slider">
+                    <div class="slider__wrapper">
+                        <div class="slider__track">
+
+                            <div class="slider__slide">
+                                <img src="images/b.png" alt="Основы алгоритмизации" class="slider__img">
+                                <div class="slider__overlay">
+                                    <h3>Основы алгоритмизации и программирования</h3>
+                                </div>
+                            </div>
+
+                            <div class="slider__slide">
+                                <img src="images/c.png" alt="Основы веб-дизайна" class="slider__img">
+                                <div class="slider__overlay">
+                                    <h3>Основы веб-дизайна</h3>
+                                </div>
+                            </div>
+
+                            <div class="slider__slide">
+                                <img src="images/d.png" alt="Основы проектирования БД" class="slider__img">
+                                <div class="slider__overlay">
+                                    <h3>Основы проектирования баз данных</h3>
+                                </div>
+                            </div>
+
+                            <div class="slider__slide">
+                                <img src="images/q.png" alt="Современные технологии" class="slider__img">
+                                <div class="slider__overlay">
+                                    <h3>Современные технологии в IT</h3>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <button class="slider__btn slider__btn--prev" aria-label="Назад">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+
+                    <button class="slider__btn slider__btn--next" aria-label="Вперёд">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+
+                    <div class="slider__dots"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Преимущества -->
+        <section class="features">
+            <div class="container">
+                <h2 class="section-title">Почему выбирают нас</h2>
+                <div class="features__grid">
+
+                    <div class="feature-card">
+                        <div class="feature-card__icon">
+                            <img src="images/online.png" alt="Онлайн">
+                        </div>
+                        <div>
+                            <h3 class="feature-card__title">Полностью онлайн</h3>
+                            <p class="feature-card__text">Учитесь из любой точки мира</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-card__icon">
+                            <img src="images/serf.png" alt="Сертификат">
+                        </div>
+                        <div>
+                            <h3 class="feature-card__title">Официальный документ</h3>
+                            <p class="feature-card__text">Удостоверение установленного образца</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-card__icon">
+                            <img src="images/pract.png" alt="Практика">
+                        </div>
+                        <div>
+                            <h3 class="feature-card__title">Практические навыки</h3>
+                            <p class="feature-card__text">Реальные проекты в портфолио</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p class="footer__text">&copy; 2026 Корочки.есть — Портал ДПО</p>
+        </div>
+    </footer>
+
+    <script src="js/slider.js"></script>
+</body>
+</html>
