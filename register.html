@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=390, initial-scale=1, user-scalable=no">
+    <title>Регистрация — Корочки.есть</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <div class="header__inner">
+                <a href="index.html" class="logo">
+                    <img src="images/logo.svg" alt="" class="logo__img">
+                    <span class="logo__text">Корочки.есть</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="auth-page">
+        <div class="container">
+            <div class="auth-card">
+                <div class="auth-card__header">
+                    <img src="images/logo-big.svg" alt="" class="auth-card__logo">
+                    <h1 class="auth-card__title">Регистрация</h1>
+                    <p class="auth-card__subtitle">Создайте аккаунт для доступа к курсам</p>
+                </div>
+
+                <form id="registerForm" novalidate>
+
+                    <div class="form-group">
+                        <label for="login" class="form-label">Логин</label>
+                        <input type="text" id="login" name="login" class="form-input"
+                               placeholder="Придумайте логин (латиница, от 6 символов)"
+                               pattern="[a-zA-Z0-9]{6,}"
+                               title="Латинские буквы и цифры, не менее 6 символов" required>
+                        <span class="form-error" id="loginError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Пароль</label>
+                        <input type="password" id="password" name="password" class="form-input"
+                               placeholder="Минимум 8 символов" minlength="8" required>
+                        <span class="form-error" id="passwordError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword" class="form-label">Подтверждение пароля</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" class="form-input"
+                               placeholder="Повторите пароль" required>
+                        <span class="form-error" id="confirmPasswordError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fullname" class="form-label">ФИО</label>
+                        <input type="text" id="fullname" name="fullname" class="form-input"
+                               placeholder="Иванов Иван Иванович"
+                               pattern="[а-яёА-ЯЁ\s]+"
+                               title="Только кириллица и пробелы" required>
+                        <span class="form-error" id="fullnameError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Телефон</label>
+                        <input type="tel" id="phone" name="phone" class="form-input"
+                               placeholder="8(XXX)XXX-XX-XX"
+                               pattern="8\(\d{3}\)\d{3}-\d{2}-\d{2}"
+                               title="Формат: 8(XXX)XXX-XX-XX" required>
+                        <span class="form-error" id="phoneError"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="form-label">Электронная почта</label>
+                        <input type="email" id="email" name="email" class="form-input"
+                               placeholder="example@mail.ru" required>
+                        <span class="form-error" id="emailError"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn--primary btn--full">Зарегистрироваться</button>
+                </form>
+
+                <div class="auth-card__footer">
+                    <a href="login.html" class="auth-link">Уже зарегистрированы? Войти</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/validation.js"></script>
+    <script src="js/register.js"></script>
+</body>
+</html>
