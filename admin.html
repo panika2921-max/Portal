@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=390, initial-scale=1, user-scalable=no">
+    <title>Панель администратора — Корочки.есть</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="header header--admin">
+        <div class="container">
+            <div class="header__inner">
+                <a href="index.html" class="logo">
+                    <img src="images/logo.svg" alt="" class="logo__img">
+                    <span class="logo__text">Корочки.есть</span>
+                </a>
+                <span class="header__badge">Админ</span>
+                <nav class="nav">
+                    <a href="#" class="nav__link nav__link--logout" id="logoutBtn">Выйти</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="page">
+        <div class="container">
+
+            <div class="page__header">
+                <h1 class="page__title">Панель администратора</h1>
+            </div>
+
+            <!-- Фильтры -->
+            <div class="admin-toolbar">
+                <div class="admin-filter">
+                    <label for="statusFilter" class="form-label form-label--sm">Фильтр по статусу:</label>
+                    <select id="statusFilter" class="form-input form-select form-select--sm">
+                        <option value="all">Все заявки</option>
+                        <option value="Новая">Новые</option>
+                        <option value="Идет обучение">В обучении</option>
+                        <option value="Обучение завершено">Завершённые</option>
+                    </select>
+                </div>
+                <div class="admin-search">
+                    <input type="text" id="searchInput" class="form-input"
+                           placeholder="Поиск по курсу или пользователю...">
+                </div>
+            </div>
+
+            <!-- Статистика -->
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <span class="stat-card__num" id="statNew">0</span>
+                    <span class="stat-card__label">Новых</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-card__num" id="statInProgress">0</span>
+                    <span class="stat-card__label">В обучении</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-card__num" id="statDone">0</span>
+                    <span class="stat-card__label">Завершено</span>
+                </div>
+            </div>
+
+            <!-- Список заявок -->
+            <div class="applications-list" id="adminApplicationsList">
+
+                <!-- Заявка 1 — Новая -->
+                <div class="application-card" data-status="Новая">
+                    <div class="application-card__header">
+                        <div>
+                            <span class="application-card__user">Иванов Иван</span>
+                            <span class="application-card__course">Основы веб-дизайна</span>
+                        </div>
+                        <span class="status status--new">Новая</span>
+                    </div>
+                    <div class="application-card__body">
+                        <div class="application-card__info">
+                            <span class="application-card__label">Дата начала:</span>
+                            <span>15.06.2026</span>
+                        </div>
+                        <div class="application-card__info">
+                            <span class="application-card__label">Оплата:</span>
+                            <span>Перевод по номеру телефона</span>
+                        </div>
+                        <div class="application-card__info">
+                            <span class="application-card__label">Email:</span>
+                            <span>ivanov@mail.ru</span>
+                        </div>
+                    </div>
+                    <div class="application-card__footer">
+                        <select class="form-input form-select form-select--sm status-select" data-app-id="1">
+                            <option value="Новая" selected>Новая</option>
+                            <option value="Идет обучение">Идет обучение</option>
+                            <option value="Обучение завершено">Обучение завершено</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Заявка 2 — В обучении -->
+                <div class="application-card" data-status="Идет обучение">
+                    <div class="application-card__header">
+                        <div>
+                            <span class="application-card__user">Петрова Анна</span>
+                            <span class="application-card__course">Основы алгоритмизации и программирования</span>
+                        </div>
+                        <span class="status status--progress">Идет обучение</span>
+                    </div>
+                    <div class="application-card__body">
+                        <div class="application-card__info">
+                            <span class="application-card__label">Дата начала:</span>
+                            <span>20.05.2026</span>
+                        </div>
+                        <div class="application-card__info">
+                            <span class="application-card__label">Оплата:</span>
+                            <span>Наличными</span>
+                        </div>
+                        <div class="application-card__info">
+                            <span class="application-card__label">Email:</span>
+                            <span>petrova@mail.ru</span>
+                        </div>
+                    </div>
+                    <div class="application-card__footer">
+                        <select class="form-input form-select form-select--sm status-select" data-app-id="2">
+                            <option value="Новая">Новая</option>
+                            <option value="Идет обучение" selected>Идет обучение</option>
+                            <option value="Обучение завершено">Обучение завершено</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Заявка 3 — Завершена -->
+                <div class="application-card" data-status="Обучение завершено">
+                    <div class="application-card__header">
+                        <div>
+                            <span class="application-card__user">Сидоров Петр</span>
+                            <span class="application-card__course">Основы проектирования баз данных</span>
+                        </div>
+                        <span class="status status--completed">Обучение завершено</span>
+                    </div>
+                    <div class="application-card__body">
+                        <div class="application-card__info">
+                            <span class="application-card__label">Дата начала:</span>
+                            <span>01.04.2026</span>
+                        </div>
+                        <div class="application-card__info">
+                            <span class="application-card__label">Оплата:</span>
+                            <span>Перевод по номеру телефона</span>
+                        </div>
+                        <div class="application-card__info">
+                            <span class="application-card__label">Email:</span>
+                            <span>sidorov@mail.ru</span>
+                        </div>
+                    </div>
+                    <div class="application-card__footer">
+                        <select class="form-input form-select form-select--sm status-select" data-app-id="3">
+                            <option value="Новая">Новая</option>
+                            <option value="Идет обучение">Идет обучение</option>
+                            <option value="Обучение завершено" selected>Обучение завершено</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Пагинация -->
+            <div class="pagination" id="pagination">
+                <button class="pagination__btn pagination__btn--active">1</button>
+                <button class="pagination__btn">2</button>
+                <button class="pagination__btn pagination__btn--next">→</button>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Toast-уведомление -->
+    <div class="toast" id="toast">Статус заявки изменён</div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>
