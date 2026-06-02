@@ -1,0 +1,485 @@
+//admin
+
+(function () {
+    'use strict';
+
+    // Toast-уведомление
+    function showToast(message) {
+        var toast = document.getElementById('toast');
+        if (!toast) return;
+
+        toast.textContent = message;
+        toast.classList.add('show');
+
+        setTimeout(function () {
+            toast.classList.remove('show');
+        }, 2500);
+    }
+
+    // Смена статуса заявки
+    document.querySelectorAll('.status-select').forEach(function (select) {
+        select.addEventListener('change', function () {
+            showToast('Статус заявки изменён на "' + this.value + '"');
+        });
+    });
+
+    // Фильтрация по статусу
+    var filter = document.getElementById('statusFilter');
+    var search = document.getElementById('searchInput');
+
+    function filterCards() {
+        var status = filter ? filter.value : 'all';
+        var query = search ? search.value.toLowerCase() : '';
+
+        document.querySelectorAll('.application-card').forEach(function (card) {
+            var cardStatus = card.dataset.status;
+            var course = card.querySelector('.application-card__course');
+            var user = card.querySelector('.application-card__user');
+
+            course = course ? course.textContent.toLowerCase() : '';
+            user = user ? user.textContent.toLowerCase() : '';
+
+            var matchStatus = (status === 'all' || cardStatus === status);
+            var matchSearch = !query || course.includes(query) || user.includes(query);
+
+            card.style.display = (matchStatus && matchSearch) ? '' : 'none';
+        });
+    }
+
+    // Обновление статистики
+    function updateStats() {
+        var cards = document.querySelectorAll('.application-card');
+        var n = 0, p = 0, d = 0;
+
+        cards.forEach(function (card) {
+            var s = card.dataset.status;
+            if (s === 'Новая') n++;
+            else if (s === 'Идет обучение') p++;
+            else if (s === 'Обучение завершено') d++;
+        });
+
+        var elNew = document.getElementById('statNew');
+        var elProg = document.getElementById('statInProgress');
+        var elDone = document.getElementById('statDone');
+
+        if (elNew) elNew.textContent = n;
+        if (elProg) elProg.textContent = p;
+        if (elDone) elDone.textContent = d;
+    }
+
+    // События фильтрации
+    if (filter) {
+        filter.addEventListener('change', function () {
+            filterCards();
+            updateStats();
+        });
+    }
+
+    if (search) {
+        search.addEventListener('input', filterCards);
+    }
+
+    // Пагинация
+    document.querySelectorAll('.pagination__btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            if (this.classList.contains('pagination__btn--next')) return;
+
+            var active = document.querySelector('.pagination__btn--active');
+            if (active) active.classList.remove('pagination__btn--active');
+            this.classList.add('pagination__btn--active');
+        });
+    });
+
+    // Инициализация статистики
+    updateStats();
+})();
+
+
+
+// application
+
+(function () {
+    'use strict';
+
+    var form = document.getElementById('applicationForm');
+    if (!form) return;
+
+    var dateInput = document.getElementById('startDate');
+
+    // Автоформатирование даты: ДД.ММ.ГГГГ
+    dateInput.addEventListener('input', function () {
+        var v = this.value.replace(/[^\d]/g, '');  // убираем всё, кроме цифр
+        var r = '';
+
+        if (v.length > 0) {
+            r = v.substring(0, 2);              // первые 2 цифры — день
+            if (v.length > 2) {
+                r += '.' + v.substring(2, 4);    // следующие 2 — месяц
+            }
+            if (v.length > 4) {
+                r += '.' + v.substring(4, 8);    // последние 4 — год
+            }
+        }
+
+        this.value = r;
+    });
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        Validator.clearErrors(this);
+
+        var valid = true;
+
+        // Проверка курса
+        var course = document.getElementById('course');
+        if (!course.value) {
+            Validator.showError(course, 'Выберите курс');
+            valid = false;
+        }
+
+        // Проверка даты
+        var date = dateInput.value.trim();
+        var dateError = Validator.validateDate(date);
+        Validator.showError(dateInput, dateError);
+        if (dateError) valid = false;
+
+        // Проверка оплаты
+        var payment = document.querySelector('input[name="payment"]:checked');
+        var paymentError = document.getElementById('paymentError');
+        if (!payment) {
+            paymentError.textContent = 'Выберите способ оплаты';
+            valid = false;
+        } else {
+            paymentError.textContent = '';
+        }
+
+        if (!valid) return;
+
+        console.log('Заявка:', {
+            course: course.value,
+            startDate: date,
+            payment: payment.value
+        });
+
+        alert('Заявка успешно отправлена!');
+        this.reset();
+        document.querySelectorAll('.form-input').forEach(function (i) {
+            i.classList.remove('success');
+        });
+    });
+})();
+
+
+
+// applications 
+(function () {
+    'use strict';
+
+    var modal = document.getElementById('reviewModal');
+    if (!modal) return;
+
+    // Открыть модалку
+    window.openReviewModal = function (id) {
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        modal.querySelector('#reviewForm').dataset.appId = id;
+    };
+
+    // Закрыть модалку
+    window.closeReviewModal = function () {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+        document.getElementById('reviewForm').reset();
+        document.querySelectorAll('.rating input').forEach(function (r) {
+            r.checked = false;
+        });
+    };
+
+    // Закрытие по оверлею
+    modal.querySelector('.modal__overlay').addEventListener('click', closeReviewModal);
+
+    // Отправка отзыва
+    document.getElementById('reviewForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        var rating = document.querySelector('input[name="rating"]:checked');
+        if (!rating) {
+            alert('Пожалуйста, выберите оценку');
+            return;
+        }
+
+        var data = {
+            appId: this.dataset.appId,
+            rating: rating.value,
+            text: document.getElementById('reviewText').value.trim()
+        };
+
+        console.log('Отзыв:', data);
+        alert('Спасибо за ваш отзыв!');
+        closeReviewModal();
+    });
+})();
+
+
+// login
+
+
+
+(function () {
+    'use strict';
+
+    var form = document.getElementById('loginForm');
+    if (!form) return;
+
+    var msgBox = document.getElementById('authMessage');
+    var msgText = document.getElementById('authMessageText');
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        Validator.clearErrors(this);
+
+        var login = document.getElementById('login').value.trim();
+        var password = document.getElementById('password').value;
+
+        var valid = true;
+
+        if (!login) {
+            Validator.showError(document.getElementById('login'), 'Введите логин');
+            valid = false;
+        }
+
+        if (!password) {
+            Validator.showError(document.getElementById('password'), 'Введите пароль');
+            valid = false;
+        }
+
+        if (!valid) return;
+
+        // Вход администратора
+        if (login === 'Admin' && password === 'KorokNET') {
+            window.location.href = 'admin.html';
+        } else if (login && password) {
+            console.log('Вход пользователя:', login);
+            window.location.href = 'applications.html';
+        } else {
+            msgBox.style.display = 'block';
+            msgText.textContent = 'Неверный логин или пароль';
+            setTimeout(function () {
+                msgBox.style.display = 'none';
+            }, 3000);
+        }
+    });
+})();
+
+
+//slider
+
+
+
+(function () {
+    'use strict';
+
+    var slider = document.querySelector('.slider');
+    if (!slider) return;
+
+    var track = slider.querySelector('.slider__track');
+    var prevBtn = slider.querySelector('.slider__btn--prev');
+    var nextBtn = slider.querySelector('.slider__btn--next');
+    var dotsContainer = slider.querySelector('.slider__dots');
+    var slides = track.querySelectorAll('.slider__slide');
+
+    var currentIndex = 0;
+    var slideCount = slides.length;
+    var autoInterval = null;
+
+    // Создание точек-навигации
+    slides.forEach(function (slide, idx) {
+        var dot = document.createElement('button');
+        dot.className = 'slider__dot' + (idx === 0 ? ' slider__dot--active' : '');
+        dot.setAttribute('aria-label', 'Слайд ' + (idx + 1));
+
+        dot.addEventListener('click', function () {
+            goToSlide(idx);
+        });
+
+        dotsContainer.appendChild(dot);
+    });
+
+    var dots = dotsContainer.querySelectorAll('.slider__dot');
+
+    // Переключение на слайд
+    function goToSlide(index) {
+        currentIndex = index;
+        track.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
+
+        dots.forEach(function (dot, i) {
+            dot.classList.toggle('slider__dot--active', i === currentIndex);
+        });
+    }
+
+    // Кнопки
+    prevBtn.addEventListener('click', function () {
+        goToSlide(currentIndex > 0 ? currentIndex - 1 : slideCount - 1);
+    });
+
+    nextBtn.addEventListener('click', function () {
+        goToSlide(currentIndex < slideCount - 1 ? currentIndex + 1 : 0);
+    });
+
+    // Автопрокрутка каждые 3 секунды
+    function startAuto() {
+        autoInterval = setInterval(function () {
+            goToSlide(currentIndex < slideCount - 1 ? currentIndex + 1 : 0);
+        }, 3000);
+    }
+
+    function stopAuto() {
+        clearInterval(autoInterval);
+    }
+
+    startAuto();
+
+    // Остановка при наведении мыши
+    slider.addEventListener('mouseenter', stopAuto);
+    slider.addEventListener('mouseleave', function () {
+        stopAuto();
+        startAuto();
+    });
+
+    // Остановка при касании (touch-устройства)
+    slider.addEventListener('touchstart', stopAuto);
+    slider.addEventListener('touchend', function () {
+        stopAuto();
+        startAuto();
+    });
+})();
+
+
+// valodation
+
+
+(function () {
+    'use strict';
+
+    window.Validator = {
+
+        validateLogin: function (value) {
+            var regex = /^[a-zA-Z0-9]{6,}$/;
+            return regex.test(value)
+                ? ''
+                : 'Логин: латиница и цифры, не менее 6 символов';
+        },
+
+        validatePassword: function (value) {
+            return value.length >= 8
+                ? ''
+                : 'Пароль: минимум 8 символов';
+        },
+
+        validateFullname: function (value) {
+            return /^[а-яёА-ЯЁ\s]+$/.test(value)
+                ? ''
+                : 'ФИО: только кириллица и пробелы';
+        },
+
+        validatePhone: function (value) {
+            return /^8\(\d{3}\)\d{3}-\d{2}-\d{2}$/.test(value)
+                ? ''
+                : 'Телефон: формат 8(XXX)XXX-XX-XX';
+        },
+
+        validateEmail: function (value) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+                ? ''
+                : 'Некорректный email';
+        },
+
+        validateDate: function (value) {
+            return /^\d{2}\.\d{2}\.\d{4}$/.test(value)
+                ? ''
+                : 'Дата: формат ДД.ММ.ГГГГ';
+        },
+
+        validateRequired: function (value) {
+            return value.trim()
+                ? ''
+                : 'Поле обязательно для заполнения';
+        },
+
+        showError: function (el, message) {
+            var errorEl = el.parentElement.querySelector('.form-error');
+            if (errorEl) {
+                errorEl.textContent = message;
+                el.classList.toggle('error', !!message);
+                el.classList.toggle('success', !message);
+            }
+        },
+
+        clearErrors: function (form) {
+            form.querySelectorAll('.form-error').forEach(function (e) {
+                e.textContent = '';
+            });
+            form.querySelectorAll('.form-input').forEach(function (i) {
+                i.classList.remove('error', 'success');
+            });
+        }
+    };
+})();
+ js/register.js
+(function () {
+    'use strict';
+
+    var form = document.getElementById('registerForm');
+    if (!form) return;
+
+    var fields = [
+        { id: 'login', validate: function (v) {
+            return Validator.validateLogin(v);
+        }},
+        { id: 'password', validate: function (v) {
+            return Validator.validatePassword(v);
+        }},
+        { id: 'confirmPassword', validate: function (v, f) {
+            var p = f.querySelector('#password').value;
+            return (v === p && v.length >= 8) ? '' : 'Пароли не совпадают';
+        }},
+        { id: 'fullname', validate: function (v) {
+            return Validator.validateFullname(v);
+        }},
+        { id: 'phone', validate: function (v) {
+            return Validator.validatePhone(v);
+        }},
+        { id: 'email', validate: function (v) {
+            return Validator.validateEmail(v);
+        }}
+    ];
+
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        Validator.clearErrors(this);
+
+        var valid = true;
+
+        fields.forEach(function (f) {
+            var input = document.getElementById(f.id);
+            var value = input.value.trim();
+            var message = f.validate(value, form);
+            Validator.showError(input, message);
+            if (message) valid = false;
+        });
+
+        if (!valid) return;
+
+        var data = {
+            login: document.getElementById('login').value.trim(),
+            password: document.getElementById('password').value,
+            fullname: document.getElementById('fullname').value.trim(),
+            phone: document.getElementById('phone').value.trim(),
+            email: document.getElementById('email').value.trim()
+        };
+
+        console.log('Регистрация:', data);
+        alert('Регистрация прошла успешно!');
+        window.location.href = 'login.html';
+    });
+})();
